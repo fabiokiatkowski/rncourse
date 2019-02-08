@@ -1,21 +1,14 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- * @lint-ignore-every XPLATJSCOPYRIGHT1
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, View, TextInput, Button, Text } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 import PlaceList from './src/components/PlaceList/PlaceList';
 import FlatPlaceList from './src/components/PlaceList/FlatPlaceList';
 import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
 
-import placeImage from './src/assets/beatiful-place.jpg';
+import { addPlace, deletePlace, deselectPlace, selectPlace } from './src/store/actions';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -25,34 +18,17 @@ const instructions = Platform.select({
 });
 
 class App extends Component {
-  state = {
-    places: [],
-    selectedPlace: null
-  }
   placeAddedHandler = placeName => {
-    this.setState(prevState => {
-      return {
-        places: prevState.places.concat({
-          key: Math.random().toString(),
-          placeName,
-          placeImage
-        })
-      };
-    });
+    this.props.onAddPlace(placeName);
   };
   placeSelectedHandler = place => {
-    this.setState(prevState => ( { selectedPlace: prevState.places.find(p => p.key === place.key) } ))
+    this.props.onSelectPlace(place);
   }
   placeDeletedHandler = () => {
-    this.setState(prevState => {
-      return {
-        places: prevState.places.filter(p => p.key !== prevState.selectedPlace.key),
-        selectedPlace: null
-      }
-    })
+    this.props.onDeletePlace();
   }
   modalCloseHanlder = () => {
-    this.setState({ selectedPlace: null })
+    this.props.onDeselectPlace();
   }
   render() {
     return (
@@ -60,7 +36,7 @@ class App extends Component {
         <PlaceDetail
           onItemDeleted={this.placeDeletedHandler}
           onModalClose={this.modalCloseHanlder}
-          selectedPlace={this.state.selectedPlace}
+          selectedPlace={this.props.selectedPlace}
         />
         <PlaceInput onPlaceAdded={this.placeAddedHandler} />
         {/* <PlaceList
@@ -68,7 +44,7 @@ class App extends Component {
           onItemDeleted={this.placeDeletedHandler}
         /> */}
         <FlatPlaceList
-          places={this.state.places}
+          places={this.props.places}
           onItemSelected={this.placeSelectedHandler}
         />
       </View>
@@ -86,4 +62,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+const mapStateToProps = state => ({
+  places: state.places.places,
+  selectedPlace: state.places.selectedPlace
+});
+
+const mapDispatchToProps = dispatch => ({
+  onAddPlace: bindActionCreators(addPlace, dispatch),
+  onDeletePlace: bindActionCreators(deletePlace, dispatch),
+  onSelectPlace: bindActionCreators(selectPlace, dispatch),
+  onDeselectPlace: bindActionCreators(deselectPlace, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
