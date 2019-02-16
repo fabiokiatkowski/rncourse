@@ -8,6 +8,7 @@ const flatPlaceList = props => {
         placeName={item.placeName}
         placeImage={item.placeImage}
         onItemPressed={() => props.onItemSelected(item)}
+        onItemDeleted={() => props.onItemDeleted(item)}
     />)
     // <Text>{item.place}</Text>
     return (

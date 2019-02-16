@@ -8,7 +8,13 @@ import PlaceList from './src/components/PlaceList/PlaceList';
 import FlatPlaceList from './src/components/PlaceList/FlatPlaceList';
 import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
 
-import { addPlace, deletePlace, deselectPlace, selectPlace } from './src/store/actions';
+import {
+  addPlace,
+  deletePlace,
+  deselectPlace,
+  selectPlace,
+  deletePlaceList
+} from './src/store/actions';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -26,6 +32,9 @@ class App extends Component {
   }
   placeDeletedHandler = () => {
     this.props.onDeletePlace();
+  }
+  placeDeleteListHanlder = place => {
+    this.props.onDeletePlaceList(place);
   }
   modalCloseHanlder = () => {
     this.props.onDeselectPlace();
@@ -46,6 +55,7 @@ class App extends Component {
         <FlatPlaceList
           places={this.props.places}
           onItemSelected={this.placeSelectedHandler}
+          onItemDeleted={this.placeDeleteListHanlder}
         />
       </View>
     );
@@ -70,6 +80,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onAddPlace: bindActionCreators(addPlace, dispatch),
   onDeletePlace: bindActionCreators(deletePlace, dispatch),
+  onDeletePlaceList: bindActionCreators(deletePlaceList, dispatch),
   onSelectPlace: bindActionCreators(selectPlace, dispatch),
   onDeselectPlace: bindActionCreators(deselectPlace, dispatch),
 });

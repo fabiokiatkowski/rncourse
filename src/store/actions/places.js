@@ -1,4 +1,4 @@
-import { ADD_PLACE, DELETE_PLACE, DESELECT_PLACE, SELECT_PLACE } from './actionTypes'
+import { ADD_PLACE, DELETE_PLACE, DESELECT_PLACE, SELECT_PLACE, DELETE_PLACE_LIST } from './actionTypes'
 import placeImage from '../../assets/beatiful-place.jpg';
 
 export const addPlace = placeName => {
@@ -16,6 +16,13 @@ export const deletePlace = () => {
         type: DELETE_PLACE
     }
 };
+
+export const deletePlaceList = (place) => {
+    return {
+        type: DELETE_PLACE_LIST,
+        data: place
+    }
+}
 
 export const selectPlace = (place) => {
     return {
