@@ -1,44 +1,35 @@
-import { ADD_PLACE, DELETE_PLACE, DESELECT_PLACE, SELECT_PLACE, DELETE_PLACE_LIST } from '../actions/actionTypes';
+import { ADD_PLACE, DELETE_PLACE } from '../actions/actionTypes';
 
 const initialState = {
-    places: [],
-    selectedPlace: null
-};
+    places: []
+}
 
-const addReducer = (state, action) => {
+const addPlaceReducer = (state, action) => {
     return {
         ...state,
         places: state.places.concat({
             key: Math.random().toString(),
-            placeName: action.data.placeName,
-            placeImage: action.data.placeImage
+            name: action.placeName,
+            image: {
+                uri: 'https://www.planwallpaper.com/static/images/7004205-cool-black-backgrounds-27640_lhK8IKI.jpg'
+            }
         })
     }
 }
-
+const deletePlaceReducer = (state, action) => {
+    return {
+        ...state,
+        places: state.places.filter(place => {
+            return place.key !== action.placeKey
+          })
+    }
+}
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_PLACE: return addReducer(state, action);
-        case DELETE_PLACE: return {
-            ...state,
-            places: state.places.filter(p => p.key !== state.selectedPlace.key),
-            selectedPlace: null
-        }
-        case DELETE_PLACE_LIST: return {
-            ...state,
-            places: state.places.filter(p => p.key !== action.data.key),
-            selectedPlace: null
-        }
-        case SELECT_PLACE: return {
-            ...state,
-            selectedPlace: state.places.find(p => p.key === action.data.key)
-        }
-        case DESELECT_PLACE: return {
-            ...state,
-            selectedPlace: null
-        }
+        case ADD_PLACE: return addPlaceReducer(state, action);
+        case DELETE_PLACE: return deletePlaceReducer(state, action);
         default: return state;
     }
 };
 
-export default reducer;
+export default reducer

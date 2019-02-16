@@ -1,45 +1,33 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-import Icons from 'react-native-vector-icons/Ionicons';
-
-const listItem = (props) => (
-    <View style={styles.listItem}>
-        <TouchableOpacity onPress={props.onItemPressed} >
-            <View style={styles.titleItem}>
-                <Image style={styles.placeImage} source={props.placeImage} />
-                <Text>{props.placeName}</Text>
-            </View>
-        </TouchableOpacity>
-        <View style={styles.deleteButtom}>
-            <TouchableOpacity onPress={props.onItemDeleted}>
-                <Icons size={18} name="md-trash" color="red" />
-            </TouchableOpacity>
-        </View>
-    </View>
+const ListItem = (props) => (
+    <TouchableOpacity onPress={props.onItemPressed}>
+        <View style={styles.listItem}>
+            <Image
+                source={props.placeImage}
+                style={styles.placeImage}
+                resizeMode="contain"
+            />
+            <Text>{props.placeName}</Text>
+        </View>    
+    </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
     listItem: {
+        width: "100%",
+        margin: 5,
         padding: 10,
-        marginBottom: 5,
-        backgroundColor: '#eee',
+        backgroundColor: "#eee",
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
     },
     placeImage: {
         marginRight: 8,
         height: 30,
         width: 30
-    },
-    titleItem: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    deleteButtom: {
-        padding: 10
     }
-});
+})
 
-export default listItem;
+export default ListItem;
