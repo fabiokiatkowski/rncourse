@@ -12,7 +12,8 @@ const addPlaceReducer = (state, action) => {
             name: action.placeName,
             image: {
                 uri: 'https://www.planwallpaper.com/static/images/7004205-cool-black-backgrounds-27640_lhK8IKI.jpg'
-            }
+            },
+            location: action.location
         })
     }
 }

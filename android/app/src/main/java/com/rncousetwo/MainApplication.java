@@ -1,5 +1,6 @@
 package com.rncousetwo;
 
+import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -32,7 +33,8 @@ public class MainApplication extends NavigationApplication {
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
     return Arrays.asList(
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new MapsPackage()
     );
   }
 

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MapView from 'react-native-maps';
 
 import { deletePlace } from '../../store/actions/index';
 
@@ -33,18 +34,36 @@ class PlaceDetail extends Component {
         } = this.state;
         return (
             <View style={[styles.container, viewMode === 'portrait' ? styles.portraitContainer : styles.landscapeContainer]} >
-                <View style={styles.subContainer}>
-                    <Image source={this.props.selectedPlace.image} style={styles.placeImage}/>
+                <View style={styles.placeDeatailContainer}>
+                    <View style={styles.subContainer}>
+                        <Image source={this.props.selectedPlace.image} style={styles.placeImage}/>
+                    </View>
+                    <View style={styles.subContainer}>
+                        <MapView
+                            initialRegion={{
+                                ...this.props.selectedPlace.location,
+                                latitudeDelta: 0.0122,
+                                longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.0122,
+                            }}
+                            style={styles.map}
+                        >
+                            <MapView.Marker coordinate={{
+                                ...this.props.selectedPlace.location,
+                                latitudeDelta: 0.0122,
+                                longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.0122,
+                            }} />
+                        </MapView>
+                    </View>
                 </View>
                 <View style={styles.subContainer}>
-                    <View>
+                    <View style={styles.palceNameContainer}>
                         <Text style={styles.palceName}>{this.props.selectedPlace.name}</Text>
-                    </View>
-                    <View>
                         <TouchableOpacity onPress={this.placeDeletedHandler}>
                             <Icon size={30} name={Platform.OS === 'android' ? "md-trash" : "ios-trash"} color="red"/>
                         </TouchableOpacity>
                     </View>
+                    {/* <View>
+                    </View> */}
                 </View>
             </View>
         );
@@ -64,7 +83,17 @@ const styles = StyleSheet.create({
     },
     placeImage: {
         width: '100%',
-        height: 200
+        height: '100%'
+    },
+    placeDeatailContainer: {
+        flex: 2
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject
+    },
+    palceNameContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     palceName: {
         fontWeight: 'bold',
@@ -73,7 +102,8 @@ const styles = StyleSheet.create({
     },
     subContainer: {
         flex: 1
-    }
+    },
+
 })
 
 const mapDispatchToProps = dispatch => ({

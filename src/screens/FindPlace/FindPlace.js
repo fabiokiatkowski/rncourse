@@ -18,7 +18,6 @@ class FindPlace extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
         Navigation.events().bindComponent(this);
     }
     navigationButtonPressed({ buttonId }) {

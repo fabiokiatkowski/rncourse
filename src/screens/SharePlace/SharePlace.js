@@ -24,8 +24,12 @@ class SharePlace extends Component {
                 validationRules: {
                     notEmpty: true
                 }
+            },
+            location: {
+                value: null,
+                valid: false
             }
-        }
+        },
     }
     constructor(props) {
         super(props);
@@ -42,25 +46,42 @@ class SharePlace extends Component {
             });
         }
     }
+    locationPickedHandler = location => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    location: {
+                        ...prevState.controls.location,
+                        value: location,
+                        valid: true
+                    }
+                }
+            }
+        })
+    }
     placeAddedHandler = () => {
         const {
             controls
         } = this.state
-        if (controls.placeName.value.trim() !== '') {
-            this.props.onAddPlace(controls.placeName.value);
-            this.setState(prevState => {
-                return {
-                    controls: {
-                        ...prevState.controls,
-                        placeName: {
-                            ...prevState.controls.placeName,
-                            value: '',
-                            valid: false
-                        }
+        this.props.onAddPlace(controls.placeName.value, controls.location.value);
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    placeName: {
+                        ...prevState.controls.placeName,
+                        value: '',
+                        valid: false
+                    },
+                    location: {
+                        ...prevState.controls.location,
+                        value: null,
+                        valid: false
                     }
                 }
-            })
-        }
+            }
+        })
     }
     placeNameChangedHandler = val => {
         this.setState(prevState => {
@@ -86,8 +107,8 @@ class SharePlace extends Component {
                     <MainText>
                         <HeadingText>Share a place with us!</HeadingText>
                     </MainText>
-                    <PickLocation />
                     <PickImage />
+                    <PickLocation onLocationPick={this.locationPickedHandler} />
                     <PlaceInput
                         placeData={controls.placeName}
                         onChangeText={this.placeNameChangedHandler}
@@ -96,7 +117,8 @@ class SharePlace extends Component {
                         <Button
                             title="Share the place!"
                             onPress={this.placeAddedHandler}
-                            disabled={!controls.placeName.valid}
+                            disabled={!controls.placeName.valid &&
+                                controls.location.valid}
                         />
                     </View>
                 </View>
