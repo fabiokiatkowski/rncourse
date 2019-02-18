@@ -1,22 +1,46 @@
 import React, { Component } from 'react';
 import { View, Image, Button, StyleSheet } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
 import imagePlaceholder from '../../assets/3D-Cool-Image.jpg';
 
 class PickImage extends Component {
-    state = {  }
+    state = {
+        pickedImage: null
+    }
+    pickImageHandler = () => {
+        ImagePicker.showImagePicker(null, (respose) => {
+            if (!respose.didCancel && !respose.error && !respose.customButton && respose.uri) {
+                this.setState(prevState => {
+                    return {
+                        ...this.state.pickedImage,
+                        pickedImage: respose
+                    }
+                });
+                this.props.onImagePick(respose);
+            } else {
+                this.setState(prevState => {
+                    return {
+                        ...this.state.pickedImage,
+                        pickedImage: null
+                    }
+                });
+            }
+        })
+    }
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.placeholder}>
                     <Image
                         style={styles.previewImage}
-                        source={imagePlaceholder}
+                        source={this.state.pickedImage}
+                        resizeMode="contain"
                     />
                 </View>
                 <View style={styles.button}>
                     <Button
                         title="Pick Image"
-                        onPress={() => {}}
+                        onPress={this.pickImageHandler}
                     />
                 </View>
             </View>

@@ -10,10 +10,10 @@ const addPlaceReducer = (state, action) => {
         places: state.places.concat({
             key: Math.random().toString(),
             name: action.placeName,
+            location: action.location,
             image: {
-                uri: 'https://www.planwallpaper.com/static/images/7004205-cool-black-backgrounds-27640_lhK8IKI.jpg'
-            },
-            location: action.location
+                uri: action.image.uri
+            }
         })
     }
 }

@@ -28,6 +28,10 @@ class SharePlace extends Component {
             location: {
                 value: null,
                 valid: false
+            },
+            image: {
+                value: null,
+                valid: false
             }
         },
     }
@@ -60,11 +64,26 @@ class SharePlace extends Component {
             }
         })
     }
+    imagePickedHanlder = image => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    image: {
+                        ...prevState.controls.image,
+                        value: image,
+                        valid: true
+                    }
+                }
+            }
+        });
+    }
     placeAddedHandler = () => {
         const {
             controls
         } = this.state
-        this.props.onAddPlace(controls.placeName.value, controls.location.value);
+        console.log(controls.image)
+        this.props.onAddPlace(controls.placeName.value, controls.location.value, controls.image.value);
         this.setState(prevState => {
             return {
                 controls: {
@@ -76,6 +95,11 @@ class SharePlace extends Component {
                     },
                     location: {
                         ...prevState.controls.location,
+                        value: null,
+                        valid: false
+                    },
+                    image: {
+                        ...prevState.controls.image,
                         value: null,
                         valid: false
                     }
@@ -107,7 +131,7 @@ class SharePlace extends Component {
                     <MainText>
                         <HeadingText>Share a place with us!</HeadingText>
                     </MainText>
-                    <PickImage />
+                    <PickImage onImagePick={this.imagePickedHanlder} />
                     <PickLocation onLocationPick={this.locationPickedHandler} />
                     <PlaceInput
                         placeData={controls.placeName}
@@ -118,7 +142,8 @@ class SharePlace extends Component {
                             title="Share the place!"
                             onPress={this.placeAddedHandler}
                             disabled={!controls.placeName.valid &&
-                                controls.location.valid}
+                                !controls.location.valid && 
+                                !controls.image.valid}
                         />
                     </View>
                 </View>
